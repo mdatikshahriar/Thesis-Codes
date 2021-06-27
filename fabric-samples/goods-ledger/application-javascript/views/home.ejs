@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Homepage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script
+        type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- Custom Theme files -->
+    <!-- Custom Theme files -->
+    <link href="style.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- //Custom Theme files -->
+    <!-- //Custom Theme files -->
+    <!-- web font -->
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+    <!-- //web font -->
+</head>
+
+<body>
+    <!-- main -->
+    <div class="main-w3layouts wrapper">
+        <h1>Welcome to Goods-ledger</h1>
+
+        <div class="main-agileinfo">
+            <h1>Register Account</h1>
+            <div class="agileits-top">
+                <form action="/registerAccount" method="POST">
+                    <input class="text" type="text" name="accountType" placeholder="Account Type" required="">
+                    <input class="text" type="text" name="accountName" placeholder="Name" required="">
+                    <input class="text" type="text" name="accountUsername" placeholder="Username" required="">
+                    <input class="text" type="email" name="accountEmail" placeholder="Email" required="">
+                    <input class="text" type="password" name="accountPassword" placeholder="Password" required="">
+                    <input class="text" type="password" name="accountConfirmedPassword" placeholder="Confirm password" required="">
+                    <input type="submit" value="Register">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <h1>Login</h1>
+            <div class="agileits-top">
+                <form action="/loginAccount" method="POST">
+                    <input class="text" type="text" name="accountUsername" placeholder="Username" required="">
+                    <input class="text" type="password" name="accountPassword" placeholder="Password" required="">
+                    <input type="submit" value="Login">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <h1>Add Manufacturer</h1>
+            <div class="agileits-top">
+                <form action="/addManufacturer" method="POST">
+                    <input class="text" type="text" name="manufacturerAccountID" placeholder="Manufacturer Account ID" required="">
+                    <input class="text" type="text" name="manufacturerName" placeholder="Manufacturer Name" required="">
+                    <input class="text" type="text" name="manufacturerTradeLicenceID" placeholder="Manufacturer Trade Licence ID" required="">
+                    <input class="text" type="text" name="manufacturerLocation" placeholder="Manufacturer Location" required="">
+                    <input class="text" type="text" name="manufacturerFoundingDate" placeholder="Manufacturer Founding Date" required="">
+                    <input type="submit" value="Add">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <h1>Add Factory</h1>
+            <div class="agileits-top">
+                <form action="/addFactory" method="POST">
+                    <input class="text" type="text" name="factoryManufacturerID" placeholder="Factory Manufacturer ID" required="">
+                    <input class="text" type="text" name="factoryID" placeholder="Factory ID" required="">
+                    <input class="text" type="text" name="factoryLocation" placeholder="Factory Location" required="">
+                    <input type="submit" value="Add">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <h1>Add Product</h1>
+            <div class="agileits-top">
+                <form action="/addProduct" method="POST">
+                    <input class="text" type="text" name="productManufacturerID" placeholder="Product Manufacturer ID" required="">
+                    <input class="text" type="text" name="productFactoryID" placeholder="Product Factory ID" required="">
+                    <input class="text" type="text" name="productID" placeholder="Product ID" required="">
+                    <input class="text" type="text" name="productName" placeholder="Product Name" required="">
+                    <input class="text" type="text" name="productType" placeholder="Product Type" required="">
+                    <input class="text" type="text" name="productBatch" placeholder="Product Batch" required="">
+                    <input class="text" type="text" name="productManufacturingDate" placeholder="Product Manufacturing Date" required="">
+                    <input class="text" type="text" name="productExpiryDate" placeholder="Product Expiry Date" required="">
+                    <input type="submit" value="Add">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <h1>Update Product Owner</h1>
+            <div class="agileits-top">
+                <form action="/updateProductOwner" method="POST">
+                    <input class="text" type="text" name="productKey" placeholder="Product Key" required="">
+                    <input class="text" type="text" name="productOwnerAccountID" placeholder="Product Owner Account ID" required="">
+                    <input type="submit" value="Update">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <h1>Update Account</h1>
+            <div class="agileits-top">
+                <form action="/updateAccount" method="POST">
+                    <input class="text" type="text" name="accountKey" placeholder="Account Key" required="">
+                    <input class="text" type="text" name="accountToken" placeholder="Account Token" required="">
+                    <input class="text" type="text" name="accountName" placeholder="Name" required="">
+                    <input class="text" type="text" name="accountUsername" placeholder="Username" required="">
+                    <input class="text" type="email" name="accountEmail" placeholder="Email" required="">
+                    <input class="text" type="text" name="accountPhoneNumber" placeholder="Phone Number" required="">
+                    <input class="text" type="password" name="accountPassword" placeholder="Password" required="">
+                    <input class="text" type="password" name="accountConfirmedPassword" placeholder="Confirm Password" required="">
+                    <input class="text" type="text" name="accountIsManufacturerAssigned" placeholder="Is Manufacturer Assigned?" required="">
+                    <input type="submit" value="Update">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <h1>Update Manufacturer</h1>
+            <div class="agileits-top">
+                <form action="/updateManufacturer" method="POST">
+                    <input class="text" type="text" name="manufacturerKey" placeholder="Manufacturer Key" required="">
+                    <input class="text" type="text" name="manufacturerName" placeholder="Manufacturer Name" required="">
+                    <input class="text" type="text" name="manufacturerTradeLicenceID" placeholder="Manufacturer Trade Licence ID" required="">
+                    <input class="text" type="text" name="manufacturerLocation" placeholder="Manufacturer Location" required="">
+                    <input class="text" type="text" name="manufacturerFoundingDate" placeholder="Manufacturer Founding Date" required="">
+                    <input type="submit" value="Update">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <h1>Update Factory</h1>
+            <div class="agileits-top">
+                <form action="/updateFactory" method="POST">
+                    <input class="text" type="text" name="factoryKey" placeholder="Factory Key" required="">
+                    <input class="text" type="text" name="factoryManufacturerID" placeholder="Factory Manufacturer ID" required="">
+                    <input class="text" type="text" name="factoryLocation" placeholder="Factory Location" required="">
+                    <input type="submit" value="Update">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <h1>Update Product</h1>
+            <div class="agileits-top">
+                <form action="/addProduct" method="POST">
+                    <input class="text" type="text" name="productKey" placeholder="Product Key" required="">
+                    <input class="text" type="text" name="productOwnerAccountID" placeholder="Product Owner Account ID" required="">
+                    <input class="text" type="text" name="productFactoryID" placeholder="Product Factory ID" required="">
+                    <input class="text" type="text" name="productName" placeholder="Product Name" required="">
+                    <input class="text" type="text" name="productType" placeholder="Product Type" required="">
+                    <input class="text" type="text" name="productBatch" placeholder="Product Batch" required="">
+                    <input class="text" type="text" name="productManufacturingDate" placeholder="Product Manufacturing Date" required="">
+                    <input class="text" type="text" name="productExpiryDate" placeholder="Product Expiry Date" required="">
+                    <input type="submit" value="Update">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Account by Token</h1>
+                <form action="/queryAccountbyToken" method="POST">
+                    <input class="text" type="text" name="accountToken" placeholder="Account Token" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Account by Email</h1>
+                <form action="/queryAccountbyEmail" method="POST">
+                    <input class="text" type="email" name="accountEmail" placeholder="Account Email" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Account by Username</h1>
+                <form action="/queryAccountbyUsername" method="POST">
+                    <input class="text" type="text" name="accountUsername" placeholder="Username" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Manufacturer by Account ID</h1>
+                <form action="/queryManufacturerbyAccountID" method="POST">
+                    <input class="text" type="text" name="manufacturerAccountID" placeholder="Account ID number" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Manufacturer by Trade Licence ID</h1>
+                <form action="/queryManufacturerbyTradeLicenceID" method="POST">
+                    <input class="text" type="text" name="manufacturerTradeLicenceID" placeholder="Trade Licence ID number" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Factory by Manufacturer ID</h1>
+                <form action="/queryFactorybyManufacturerID" method="POST">
+                    <input class="text" type="text" name="factoryManufacturerID" placeholder="Manufacturer ID" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Factory by ID</h1>
+                <form action="/queryFactorybyID" method="POST">
+                    <input class="text" type="text" name="factoryID" placeholder="ID number" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Product by ID</h1>
+                <form action="/queryProductbyID" method="POST">
+                    <input class="text" type="text" name="productID" placeholder="ID number" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Product by Owner Account ID</h1>
+                <form action="/queryProductbyOwnerAccountID" method="POST">
+                    <input class="text" type="text" name="productOwnerAccountID" placeholder="Owner Account ID number" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Product by Manufacturer ID</h1>
+                <form action="/queryProductbyManufacturerID" method="POST">
+                    <input class="text" type="text" name="productManufacturerID" placeholder="Manufacturer ID number" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <h1>Query Product by Factory ID</h1>
+                <form action="/queryProductbyFactoryID" method="POST">
+                    <input class="text" type="text" name="productFactoryID" placeholder="Factory ID number" required="">
+                    <input type="submit" value="Query">
+                </form>
+            </div>
+        </div>
+    
+    </div>
+    <!-- //main -->
+</body>
+
+</html>
