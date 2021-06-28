@@ -29,30 +29,121 @@ docker swarm init --advertise-addr 52.152.224.162
 docker swarm join-token manager
 
 # peer1.org1
-docker swarm join --token SWMTKN-1-5ye3p695g5onh1xff188882pelm4vr31wp1tjph33ev6w0bc69-7vqcybibx3uhu3tlujjvfvsf4 52.152.224.162:2377 --advertise-addr 20.90.250.97
+docker swarm join --token SWMTKN-1-37oy1xzsbxfxqjhtonaf4x7v0tt20rnsi6tmekgrpizvshxuv6-d4am50hjobu0eldxqhc1jf9eg 52.152.224.162:2377 --advertise-addr 20.90.250.97
 
 # peer0.org2
-docker swarm join --token SWMTKN-1-5ye3p695g5onh1xff188882pelm4vr31wp1tjph33ev6w0bc69-7vqcybibx3uhu3tlujjvfvsf4 52.152.224.162:2377 --advertise-addr 104.43.235.175
+docker swarm join --token SWMTKN-1-37oy1xzsbxfxqjhtonaf4x7v0tt20rnsi6tmekgrpizvshxuv6-d4am50hjobu0eldxqhc1jf9eg 52.152.224.162:2377 --advertise-addr 104.43.235.175
 
 # peer1.org2
-docker swarm join --token SWMTKN-1-5ye3p695g5onh1xff188882pelm4vr31wp1tjph33ev6w0bc69-7vqcybibx3uhu3tlujjvfvsf4 52.152.224.162:2377 --advertise-addr 13.92.177.155
+docker swarm join --token SWMTKN-1-37oy1xzsbxfxqjhtonaf4x7v0tt20rnsi6tmekgrpizvshxuv6-d4am50hjobu0eldxqhc1jf9eg 52.152.224.162:2377 --advertise-addr 13.92.177.155
+
+### Overlay Network ###
+docker network create --attachable --driver overlay first-network
 
 ### Clone repo ###
 
 git clone https://github.com/mdatikshahriar/Thesis-Codes.git
 
+### Install go ###
+sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.16.5.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+
 ### optional ###
 curl -sSL https://bit.ly/2ysbOFE | bash -s 2.2.0
 
-sudo chmod u+x 
+sudo chmod u+x install.sh
+sudo ./install.sh
+
+sudo chmod -R 777 Thesis-Codes/
+cd Thesis-Codes/fabric-samples/4host-swarm
 
 export PATH=$PATH:$HOME/Thesis-Codes/fabric-samples/bin
+
+sudo rm -r Thesis-Codes/
+sudo rm -r fabric-samples/
+
+### Host and network up ###
+
+# peer0.org1
+sudo chmod u+x host1up.sh
+sudo ./host1up.sh
+
+# peer1.org1
+sudo chmod u+x host2up.sh
+sudo ./host2up.sh
+
+# peer0.org2
+sudo chmod u+x host3up.sh
+sudo ./host3up.sh
+
+# peer1.org2
+sudo chmod u+x host4up.sh
+sudo ./host4up.sh
+
+# peer0.org1
+sudo chmod u+x mychannelup.sh
+sudo ./mychannelup.sh
+
+### Check ###
+
+# peer0.org1
+docker exec peer0.org1.example.com peer channel getinfo -c mychannel
+
+# peer1.org1
+docker exec peer1.org1.example.com peer channel getinfo -c mychannel
+
+# peer0.org2
+docker exec peer0.org2.example.com peer channel getinfo -c mychannel
+
+# peer1.org2
+docker exec peer1.org2.example.com peer channel getinfo -c mychannel
+
+
+### Package chaincode ###
+
+# If not done before
+pushd ../chaincode/fabcar/go
+GO111MODULE=on go mod vendor
+popd
+
+# packaging
+docker exec cli peer lifecycle chaincode package fabcar.tar.gz --path github.com/chaincode/fabcar/go --label fabcar_1
+
+### Install chaincode ###
+
+# peer0.org1
+docker exec cli peer lifecycle chaincode install fabcar.tar.gz
+# peer1.org1
+docker exec -e CORE_PEER_ADDRESS=peer1.org1.example.com:8051 -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt cli peer lifecycle chaincode install fabcar.tar.gz
+# peer0.org2
+docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp -e CORE_PEER_ADDRESS=peer0.org2.example.com:9051 -e CORE_PEER_LOCALMSPID="Org2MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt cli peer lifecycle chaincode install fabcar.tar.gz
+# peer1.org2
+docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp -e CORE_PEER_ADDRESS=peer1.org2.example.com:10051 -e CORE_PEER_LOCALMSPID="Org2MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt cli peer lifecycle chaincode install fabcar.tar.gz
+
+### Approve chaincode ###
+
+# for org1
+docker exec cli peer lifecycle chaincode approveformyorg --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem --channelID mychannel --name fabcar --version 1 --sequence 1 --waitForEvent --package-id fabcar_1:a976a3f2eb95c19b91322fc939dd37135837e0cfc5d52e4dbc3a2ef881d14179
+# for org2
+docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp -e CORE_PEER_ADDRESS=peer0.org2.example.com:9051 -e CORE_PEER_LOCALMSPID="Org2MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt cli peer lifecycle chaincode approveformyorg --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem --channelID mychannel --name fabcar --version 1 --sequence 1 --waitForEvent --package-id fabcar_1:a976a3f2eb95c19b91322fc939dd37135837e0cfc5d52e4dbc3a2ef881d14179
+
+docker exec cli peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name fabcar --version 1 --sequence 1
+
+
+### Commit chaincode ###
+
+docker exec cli peer lifecycle chaincode commit -o orderer.example.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0.org2.example.com:9051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt --channelID mychannel --name fabcar --version 1 --sequence 1
+
+docker exec cli peer lifecycle chaincode querycommitted --channelID mychannel --name fabcar
+
+### InitLedger ###
+
+docker exec cli peer chaincode invoke -o orderer3.example.com:9050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n fabcar --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0.org2.example.com:9051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"Args":["initLedger"]}'
 
 
 ### Create Cars ###
 
-
-docker exec cli peer chaincode invoke -o orderer3.example.com:9050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n fabcar --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0.org2.example.com:9051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"Args":["createCar", "CAR11", "Nissan", "GTX", "white", "Bappi"]}'
+docker exec cli peer chaincode invoke -o orderer3.example.com:9050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n fabcar --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0.org2.example.com:9051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"Args":["createCar", "CAR10", "Nissan", "GTX", "white", "Bappi"]}'
 
 
 ### Query Cars ###
