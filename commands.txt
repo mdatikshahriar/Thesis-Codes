@@ -1,0 +1,70 @@
+### VM Addresses ###
+ThesisVM1 - 52.152.224.162
+ThesisVM2 - 20.90.250.97
+ThesisVM3 - 104.43.235.175
+ThesisVM4 - 13.92.177.155
+
+### Clean docker ###
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+
+docker rmi $(docker images -a -q) --force
+
+docker ps -aq | xargs -n 1 docker stop
+docker ps -aq | xargs -n 1 docker rm -v
+
+docker volume prune
+
+docker network prune
+
+docker system prune -a
+
+docker swarm leave --force
+
+### Start Docker swarm ###
+
+# peer0.org1
+docker swarm init --advertise-addr 52.152.224.162
+docker swarm join-token manager
+
+# peer1.org1
+docker swarm join --token SWMTKN-1-5ye3p695g5onh1xff188882pelm4vr31wp1tjph33ev6w0bc69-7vqcybibx3uhu3tlujjvfvsf4 52.152.224.162:2377 --advertise-addr 20.90.250.97
+
+# peer0.org2
+docker swarm join --token SWMTKN-1-5ye3p695g5onh1xff188882pelm4vr31wp1tjph33ev6w0bc69-7vqcybibx3uhu3tlujjvfvsf4 52.152.224.162:2377 --advertise-addr 104.43.235.175
+
+# peer1.org2
+docker swarm join --token SWMTKN-1-5ye3p695g5onh1xff188882pelm4vr31wp1tjph33ev6w0bc69-7vqcybibx3uhu3tlujjvfvsf4 52.152.224.162:2377 --advertise-addr 13.92.177.155
+
+### Clone repo ###
+
+git clone https://github.com/mdatikshahriar/Thesis-Codes.git
+
+### optional ###
+curl -sSL https://bit.ly/2ysbOFE | bash -s 2.2.0
+
+sudo chmod u+x 
+
+export PATH=$PATH:$HOME/Thesis-Codes/fabric-samples/bin
+
+
+### Create Cars ###
+
+
+docker exec cli peer chaincode invoke -o orderer3.example.com:9050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n fabcar --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0.org2.example.com:9051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"Args":["createCar", "CAR11", "Nissan", "GTX", "white", "Bappi"]}'
+
+
+### Query Cars ###
+
+# peer0.org1
+docker exec cli peer chaincode query -n fabcar -C mychannel -c '{"Args":["queryAllCars"]}'
+
+# peer1.org1
+docker exec -e CORE_PEER_ADDRESS=peer1.org1.example.com:8051 -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt cli peer chaincode query -n fabcar -C mychannel -c '{"Args":["queryAllCars"]}'
+
+# peer0.org2
+docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp -e CORE_PEER_ADDRESS=peer0.org2.example.com:9051 -e CORE_PEER_LOCALMSPID="Org2MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt cli peer chaincode query -n fabcar -C mychannel -c '{"Args":["queryAllCars"]}'
+
+# peer1.org2
+docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp -e CORE_PEER_ADDRESS=peer1.org2.example.com:10051 -e CORE_PEER_LOCALMSPID="Org2MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt cli peer chaincode query -n fabcar -C mychannel -c '{"Args":["queryAllCars"]}'

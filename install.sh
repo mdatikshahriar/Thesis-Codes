@@ -7,7 +7,7 @@ cp fabric-samples/stop.sh .temp
 cp fabric-samples/.gitignore .temp
 rm -rf fabric-samples
 
-curl https://raw.githubusercontent.com/hyperledger/fabric/master/scripts/bootstrap.sh | bash -s
+curl https://raw.githubusercontent.com/hyperledger/fabric/master/scripts/bootstrap.sh | bash -s 2.2.0
 
 cp -r .temp/goods-ledger fabric-samples
 cp -r .temp/4host-swarm fabric-samples
