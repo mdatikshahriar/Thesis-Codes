@@ -28,7 +28,6 @@ docker stop 63a7dbb53e7c
 docker stop a7a8fc39975b
 docker stop f49cee1c0c62 
 
-
 docker start 95f37557846f
 docker start 63a7dbb53e7c
 
@@ -42,20 +41,22 @@ docker swarm init --advertise-addr 52.152.224.162
 docker swarm join-token manager
 
 # peer1.org1
-docker swarm join --token SWMTKN-1-0yofzb5b3qmr4uggchr1ks7d3t9gafbzst0x1cdahppqxrokxo-exv0hiii1khdcbzydourgryd0 52.152.224.162:2377 --advertise-addr 20.90.250.97
+docker swarm join --token SWMTKN-1-4epppmuri28ru73b2z8ok9vyz0d7umk755ykndbtcyik8mcrvz-3jfegeoxtl1tnjsnh23wjj087 52.152.224.162:2377 --advertise-addr 20.90.250.97
 
 # peer0.org2
-docker swarm join --token SWMTKN-1-0yofzb5b3qmr4uggchr1ks7d3t9gafbzst0x1cdahppqxrokxo-exv0hiii1khdcbzydourgryd0 52.152.224.162:2377 --advertise-addr 104.43.235.175
+docker swarm join --token SWMTKN-1-4epppmuri28ru73b2z8ok9vyz0d7umk755ykndbtcyik8mcrvz-3jfegeoxtl1tnjsnh23wjj087 52.152.224.162:2377 --advertise-addr 104.43.235.175
 
 # peer1.org2
-docker swarm join --token SWMTKN-1-0yofzb5b3qmr4uggchr1ks7d3t9gafbzst0x1cdahppqxrokxo-exv0hiii1khdcbzydourgryd0 52.152.224.162:2377 --advertise-addr 13.92.177.155
+docker swarm join --token SWMTKN-1-4epppmuri28ru73b2z8ok9vyz0d7umk755ykndbtcyik8mcrvz-3jfegeoxtl1tnjsnh23wjj087 52.152.224.162:2377 --advertise-addr 13.92.177.155
 
 ### Overlay Network ###
 docker network create --attachable --driver overlay first-network
 
 ### Clone repo ###
 
-git clone https://github.com/mdatikshahriar/Thesis-Codes.git
+cd
+sudo rm -r Thesis-Codes/
+sudo git clone https://github.com/mdatikshahriar/Thesis-Codes.git
 
 ### Install go ###
 sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.16.5.linux-amd64.tar.gz
@@ -71,12 +72,11 @@ sudo ./install.sh
 cd
 export PATH=$PATH:$HOME/Thesis-Codes/fabric-samples/bin
 sudo chmod -R 777 Thesis-Codes/
-cd Thesis-Codes/fabric-samples/4host-swarm
+cd Thesis-Codes/fabric-samples/4host-swarm-default
+cd Thesis-Codes/fabric-samples/4host-swarm-custom
 
 cd
 sudo rm -r Thesis-Codes/
-
-sudo rm -r fabric-samples/
 
 sudo ufw status
 
