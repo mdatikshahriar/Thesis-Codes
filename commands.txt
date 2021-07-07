@@ -22,6 +22,19 @@ docker system prune -a
 
 docker swarm leave --force
 
+docker stop 95f37557846f
+docker stop 63a7dbb53e7c
+
+docker stop a7a8fc39975b
+docker stop f49cee1c0c62 
+
+
+docker start 95f37557846f
+docker start 63a7dbb53e7c
+
+docker start a7a8fc39975b
+docker start f49cee1c0c62 
+
 ### Start Docker swarm ###
 
 # peer0.org1

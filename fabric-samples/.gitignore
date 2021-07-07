@@ -2,7 +2,8 @@
 /*/
 
 !/goods-ledger/
-!/4host-swarm/
+!/4host-swarm-custom/
+!/4host-swarm-default/
 !run.sh
 !stop.sh
 !.gitignore
