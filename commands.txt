@@ -29,13 +29,13 @@ docker swarm init --advertise-addr 52.152.224.162
 docker swarm join-token manager
 
 # peer1.org1
-docker swarm join --token SWMTKN-1-37oy1xzsbxfxqjhtonaf4x7v0tt20rnsi6tmekgrpizvshxuv6-d4am50hjobu0eldxqhc1jf9eg 52.152.224.162:2377 --advertise-addr 20.90.250.97
+docker swarm join --token SWMTKN-1-0yofzb5b3qmr4uggchr1ks7d3t9gafbzst0x1cdahppqxrokxo-exv0hiii1khdcbzydourgryd0 52.152.224.162:2377 --advertise-addr 20.90.250.97
 
 # peer0.org2
-docker swarm join --token SWMTKN-1-37oy1xzsbxfxqjhtonaf4x7v0tt20rnsi6tmekgrpizvshxuv6-d4am50hjobu0eldxqhc1jf9eg 52.152.224.162:2377 --advertise-addr 104.43.235.175
+docker swarm join --token SWMTKN-1-0yofzb5b3qmr4uggchr1ks7d3t9gafbzst0x1cdahppqxrokxo-exv0hiii1khdcbzydourgryd0 52.152.224.162:2377 --advertise-addr 104.43.235.175
 
 # peer1.org2
-docker swarm join --token SWMTKN-1-37oy1xzsbxfxqjhtonaf4x7v0tt20rnsi6tmekgrpizvshxuv6-d4am50hjobu0eldxqhc1jf9eg 52.152.224.162:2377 --advertise-addr 13.92.177.155
+docker swarm join --token SWMTKN-1-0yofzb5b3qmr4uggchr1ks7d3t9gafbzst0x1cdahppqxrokxo-exv0hiii1khdcbzydourgryd0 52.152.224.162:2377 --advertise-addr 13.92.177.155
 
 ### Overlay Network ###
 docker network create --attachable --driver overlay first-network
@@ -59,7 +59,9 @@ cd Thesis-Codes/fabric-samples/4host-swarm
 
 export PATH=$PATH:$HOME/Thesis-Codes/fabric-samples/bin
 
+cd
 sudo rm -r Thesis-Codes/
+
 sudo rm -r fabric-samples/
 
 ### Host and network up ###

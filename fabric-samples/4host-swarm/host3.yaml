@@ -17,14 +17,6 @@ networks:
 
 services:
 
-  orderer.example.com:
-    extends:
-      file:   base/docker-compose-base.yaml
-      service: orderer.example.com
-    container_name: orderer.example.com
-    networks:
-      - byfn
-
   orderer3.example.com:
     extends:
       file: base/peer-base.yaml
@@ -41,6 +33,23 @@ services:
         - orderer3.example.com:/var/hyperledger/production/orderer
     ports:
     - 9050:9050
+  
+  orderer5.example.com:
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_LISTENPORT=11050
+    container_name: orderer5.example.com
+    networks:
+    - byfn
+    volumes:
+        - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer5.example.com/msp:/var/hyperledger/orderer/msp
+        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer5.example.com/tls/:/var/hyperledger/orderer/tls
+        - orderer5.example.com:/var/hyperledger/production/orderer
+    ports:
+    - 11050:11050
 
   peer0.org2.example.com:
     container_name: peer0.org2.example.com
