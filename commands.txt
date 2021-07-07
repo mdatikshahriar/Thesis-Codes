@@ -51,18 +51,23 @@ export PATH=$PATH:/usr/local/go/bin
 ### optional ###
 curl -sSL https://bit.ly/2ysbOFE | bash -s 2.2.0
 
+cd Thesis-Codes/
 sudo chmod u+x install.sh
 sudo ./install.sh
 
+cd
+export PATH=$PATH:$HOME/Thesis-Codes/fabric-samples/bin
 sudo chmod -R 777 Thesis-Codes/
 cd Thesis-Codes/fabric-samples/4host-swarm
-
-export PATH=$PATH:$HOME/Thesis-Codes/fabric-samples/bin
 
 cd
 sudo rm -r Thesis-Codes/
 
 sudo rm -r fabric-samples/
+
+sudo ufw status
+
+docker ps -a
 
 ### Host and network up ###
 
@@ -115,10 +120,13 @@ docker exec cli peer lifecycle chaincode package fabcar.tar.gz --path github.com
 
 # peer0.org1
 docker exec cli peer lifecycle chaincode install fabcar.tar.gz
+
 # peer1.org1
 docker exec -e CORE_PEER_ADDRESS=peer1.org1.example.com:8051 -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt cli peer lifecycle chaincode install fabcar.tar.gz
+
 # peer0.org2
 docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp -e CORE_PEER_ADDRESS=peer0.org2.example.com:9051 -e CORE_PEER_LOCALMSPID="Org2MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt cli peer lifecycle chaincode install fabcar.tar.gz
+
 # peer1.org2
 docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp -e CORE_PEER_ADDRESS=peer1.org2.example.com:10051 -e CORE_PEER_LOCALMSPID="Org2MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt cli peer lifecycle chaincode install fabcar.tar.gz
 
@@ -126,6 +134,7 @@ docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fa
 
 # for org1
 docker exec cli peer lifecycle chaincode approveformyorg --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem --channelID mychannel --name fabcar --version 1 --sequence 1 --waitForEvent --package-id fabcar_1:a976a3f2eb95c19b91322fc939dd37135837e0cfc5d52e4dbc3a2ef881d14179
+
 # for org2
 docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp -e CORE_PEER_ADDRESS=peer0.org2.example.com:9051 -e CORE_PEER_LOCALMSPID="Org2MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt cli peer lifecycle chaincode approveformyorg --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem --channelID mychannel --name fabcar --version 1 --sequence 1 --waitForEvent --package-id fabcar_1:a976a3f2eb95c19b91322fc939dd37135837e0cfc5d52e4dbc3a2ef881d14179
 

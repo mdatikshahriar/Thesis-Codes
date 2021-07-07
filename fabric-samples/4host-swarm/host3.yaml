@@ -6,8 +6,8 @@
 version: '2'
 
 volumes:
-  orderer.example.com:
-  orderer3.example.com:  
+  orderer3.example.com:
+  orderer5.example.com:  
   peer0.org2.example.com:
 
 networks:
